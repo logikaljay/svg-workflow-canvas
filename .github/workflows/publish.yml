@@ -6,7 +6,6 @@ on:
     types: [completed]
 
 env:
-  IMAGE_NAME: "svg-workflow-canvas"
   DOCKER_BUILDKIT: 1
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -21,9 +20,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
-
-      - name: Login to GPR
-        run: echo "//npm.pkg.github.com.org/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+          registry-url: https://npm.pkg.github.com/
+          scope: '@logikaljay'
 
       - name: Get npm cache
         id: npm-cache
@@ -41,7 +39,7 @@ jobs:
         run: |
           npm i
 
-      - name: Publish
+      - name: Publish to Github Package Registry
         run: |
           npm run build
           npm publish
